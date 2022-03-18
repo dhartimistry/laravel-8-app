@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Car;
+
 
 class CarsController extends Controller
 {
@@ -13,7 +15,10 @@ class CarsController extends Controller
      */
     public function index()
     {
-        return view('cars.index');
+        $cars = Car::all();
+        return view('cars.index',[
+            'cars' => $cars
+        ]);
     }
 
     /**
@@ -22,8 +27,8 @@ class CarsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        //
+    {   
+        return view('cars.create');
     }
 
     /**
@@ -34,7 +39,15 @@ class CarsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $car = Car::create([
+            'name' => $request->input('name'),
+            'founded' => $request->input('founded'),
+            'description' => $request->input('description')
+        ]);
+
+        return redirect('/cars');
+
+        
     }
 
     /**
@@ -56,7 +69,9 @@ class CarsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $car = Car::find($id)->first();
+
+        return view('cars.edit')->with('car',$car);
     }
 
     /**
@@ -68,7 +83,13 @@ class CarsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $car = Car::where('id',$id)->update([
+            'name' => $request->input('name'),
+            'founded' => $request->input('founded'),
+            'description' => $request->input('description')
+        ]);
+
+        return redirect('/cars');
     }
 
     /**
@@ -77,8 +98,10 @@ class CarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return redirect('/cars');
     }
 }
