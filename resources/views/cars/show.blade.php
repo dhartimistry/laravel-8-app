@@ -18,19 +18,33 @@
                 {{ $car->description }}
             </p>
 
-            <ul>
-                <p class ="text-lg text-gray-700 py-3">
-                    Models
-                </p>
-             @forelse ($car->carModels as $model)
-                <li class="inline italic text-gray-600 px-1 py-6"> 
-                    {{$model['model_name']}}
-                </li>
-             @empty
-                <p>
-                    mo models found
-                </p>
-             @endforelse
+            <table class="table-auto">  
+                <tr class="bg-blue-100">
+                    <th class="w-1/2 border-4 border-gray-500">
+                        Model
+                    </th>
+                    <th class="w-1/2 border-4 border-gray-500">
+                        Engines
+                    </th>
+
+                    @forelse ($car->carModels as $model)
+                    <tr>
+                        <td class="border-4  border-gray-500 ">
+                            {{ $model->model_name}}
+                        </td>
+                        <td class="border-4  border-gray-500 ">
+                            @foreach($car->engines as $engine)
+                                @if($model->id == $engine->model_id)
+                                    {{ $engine->engine_name}}
+                                @endif 
+                            @endforeach
+\                        </td>
+                    </tr>
+                    @empty
+                        No cars Model found
+                    @endforelse
+                </tr>
+            </table>
 
 
             </ul>
